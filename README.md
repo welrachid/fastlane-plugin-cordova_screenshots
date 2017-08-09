@@ -1,4 +1,6 @@
-# ionic_integration plugin
+# cordova_screenshots plugin
+
+WORK IN PROGRESS!
 
 [![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-ionic_integration)
 
