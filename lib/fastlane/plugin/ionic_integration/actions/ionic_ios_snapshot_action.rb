@@ -4,7 +4,7 @@ module Fastlane
   module Actions
     class IonicIosSnapshotAction < Action
       def self.run(params)
-        UI.message "Configuring Xcode with UI Tests Located in #{IonicIntegration::IONIC_IOS_CONFIG_UITESTS_PATH}/**"
+        UI.message "Configuring Xcode with UI Tests Located in '#{IonicIntegration::IONIC_IOS_CONFIG_UITESTS_PATH}/**'"
 
         (!params.nil? && !params[:ionic_ios_xcode_path].nil?) || UI.user_error!("Mandatory parameter :ionic_ios_xcode_path not specified")
 
@@ -16,7 +16,7 @@ module Fastlane
         team_id = params[:team_id]
         bundle_id = params[:bundle_id]
 
-        File.exist?(xcode_project) || UI.user_error!("Xcode Project #{xcode_project} does not exist!")
+        File.exist?(xcode_project) || UI.user_error!("Xcode Project '#{xcode_project}' does not exist!")
 
         #
         # Find all preconfigured UI Unit Tests
@@ -24,7 +24,7 @@ module Fastlane
         schemes = Dir.glob("#{IonicIntegration::IONIC_IOS_CONFIG_UITESTS_PATH}/*/").reject do |d|
           d =~ /^\.{1,2}$/
         end
-        UI.message "Found #{schemes}..."
+        UI.message "Found schemes: #{schemes}"
 
         #
         # Process each scheme
@@ -41,7 +41,7 @@ module Fastlane
         target = nil
         proj.targets.each do |t|
           next unless t.name == scheme_name
-          UI.important "Found existing Target #{t.name}. Will be removed."
+          UI.important "Found existing Target '#{t.name}'. Will be removed."
           target = t
           break
         end
@@ -54,7 +54,7 @@ module Fastlane
           next unless g.name == scheme_name
           g.clear
           test_group = g
-          UI.important "Found existing Code Group #{g.name}. Will be removed."
+          UI.important "Found existing Code Group '#{g.name}'. Will be removed."
           break
         end
 
@@ -73,7 +73,7 @@ module Fastlane
         product_ref_name = scheme_name + '.xctest'
         proj.products_group.files.each do |product_ref|
           if product_ref.path == product_ref_name
-            UI.important "Found existing Code Group #{product_ref.path}. Removed it."
+            UI.important "Found existing Code Group '#{product_ref.path}'. Removed it."
             product_ref.remove_from_project
           end
         end
@@ -91,14 +91,14 @@ module Fastlane
         xcode_folder = File.dirname(xcode_project_path)
         project_name = File.basename(xcode_project_path, ".xcodeproj")
 
-        UI.message("Setting up #{scheme_name} as UI Unit Test folder and Scheme in #{xcode_folder} for Xcode Project #{project_name}")
+        UI.message("Setting up '#{scheme_name}' as UI Unit Test folder and Scheme in '#{xcode_folder}' for Xcode Project '#{project_name}'")
 
         #
         # Xcode Project
         #
-        proj = Xcodeproj::Project.open(xcode_project_path) || UI.user_error!("Unable to Open Xcode Project #{xcode_project_path}")
+        proj = Xcodeproj::Project.open(xcode_project_path) || UI.user_error!("Unable to Open Xcode Project '#{xcode_project_path}'")
 
-        UI.message("Xcode Project is Version #{proj.root_object.compatibility_version} Compatible")
+        UI.message("Xcode Project is version '#{proj.root_object.compatibility_version}' compatible")
 
         #
         # Clean Xcode project
@@ -108,22 +108,22 @@ module Fastlane
         #
         # Create new test group
         #
-        UI.message "Creating UI Test Group #{scheme_name} for snapshots testing"
+        UI.message "Creating UI Test Group '#{scheme_name}' for snapshots testing"
         test_group = proj.new_group(scheme_name.to_s, File.absolute_path(config_folder), '<absolute>')
 
         #
         # Find main target
         #
-        UI.message "Finding Main Target (of the Project)..."
+        UI.message "Finding Main Target (of the project)..."
         main_target = nil
         proj.root_object.targets.each do |t|
           if t.name == project_name
-            UI.message "Found main target as #{t.name}"
+            UI.message "Found main target as '#{t.name}'"
             main_target = t
           end
         end
 
-        main_target || UI.user_error!("Unable to locate Main Target for Ionic App in #{project_name}")
+        main_target || UI.user_error!("Unable to locate Main Target for app in '#{project_name}'")
 
         #
         # Create new target
@@ -142,7 +142,7 @@ module Fastlane
         #
         # Add main_target as dependency of target
         #
-        UI.message "Adding Main Target Dependency: " + main_target.to_s
+        UI.message "Adding Main Target Dependency: '#{main_target}'"
         target.add_dependency(main_target)
 
         # We need to save here for some reason... xcodeproj!?
@@ -151,11 +151,11 @@ module Fastlane
         #
         # Add files (fastlane configured UI Unit Tests) into target (via test group)
         #
-        UI.message "Adding Pre-Configured UI Unit Tests (*.plist and *.swift) to Test Group #{scheme_name}"
+        UI.message "Adding Pre-Configured UI Unit Tests (*.plist and *.swift) to Test Group '#{scheme_name}'"
 
         files = []
         Dir["#{config_folder}/*.plist", "#{config_folder}/*.swift"].each do |file|
-          UI.message "Adding UI Test Source #{file}"
+          UI.message "Adding UI Test Source '#{file}'"
           files << test_group.new_reference(File.absolute_path(file), '<absolute>')
         end
         target.add_file_references(files)
@@ -189,7 +189,7 @@ module Fastlane
         #
         # Create a shared scheme for the UI tests
         #
-        UI.message "Generating XCode Scheme #{scheme_name} to run UI Snapshot Tests"
+        UI.message "Generating Xcode Scheme '#{scheme_name}' to run UI Snapshot Tests"
         existing_scheme = Xcodeproj::XCScheme.shared_data_dir(xcode_project_path) + "/#{scheme_name}.xcscheme"
         scheme = File.exist?(existing_scheme) ? Xcodeproj::XCScheme.new(existing_scheme) : Xcodeproj::XCScheme.new
 
@@ -209,7 +209,7 @@ module Fastlane
         #
         # Success
         #
-        UI.success "Completed Retrofit of #{scheme_name} in Ionic Generated XCode Project #{project_name} OK... SAVING"
+        UI.success "Completed retrofit of '#{scheme_name}' into generated Xcode Project '#{project_name}'."
 
       end
 
@@ -234,7 +234,7 @@ module Fastlane
         [
           FastlaneCore::ConfigItem.new(key: :ionic_ios_xcode_path,
                                        env_name: 'IONIC_IOS_XCODE_PATH',
-                                       description: 'Path to XCode Project Generated by Ionic',
+                                       description: 'Path to Xcode Project Generated by Ionic',
                                        default_value: Fastlane::Helper::IonicIntegrationHelper.find_default_ios_xcode_workspace,
                                        optional: false),
           FastlaneCore::ConfigItem.new(key: :ionic_min_target_ios,

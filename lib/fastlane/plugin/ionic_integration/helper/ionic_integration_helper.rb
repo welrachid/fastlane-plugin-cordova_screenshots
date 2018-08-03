@@ -8,11 +8,11 @@ module Fastlane
       def self.copy_all_files(src_folder, project_folder)
         if src_folder && Dir.exist?(src_folder)
           dest_folder = project_folder.to_s
-          UI.message "Copying all files from #{src_folder} to #{dest_folder}"
+          UI.message "Copying all files from '#{src_folder}' to '#{dest_folder}'"
           Dir.exist?(dest_folder) || FileUtils.mkdir_p(dest_folder)
           FileUtils.cp_r(src_folder + "/.", dest_folder)
         elsif
-          UI.user_error! "Copying files: #{src_folder} does not exist."
+          UI.user_error! "Copying files: '#{src_folder}' does not exist."
         end
       end
 
