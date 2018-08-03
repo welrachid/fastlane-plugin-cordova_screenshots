@@ -27,6 +27,8 @@ module Fastlane
         # Just call our main ios snapshot action, if there is a workspace
         #
         if Dir.exist?(workspace_path)
+          UI.message("Switching over to action `ionic_ios_snapshot_action` with params `ionic_ios_xcode_path`=#{workspace_path},
+            `ionic_min_target_ios`=#{target_os}")
           Actions::IonicIosSnapshotAction.run(
             ionic_ios_xcode_path: workspace_path,
             ionic_min_target_ios: target_os
