@@ -142,7 +142,7 @@ module Fastlane
         #
         # Add main_target as dependency of target
         #
-        UI.message "Adding Main Target Dependency: '#{main_target}'"
+        UI.message "Adding Main Target Dependency to new Target: '#{main_target}'"
         target.add_dependency(main_target)
 
         # We need to save here for some reason... xcodeproj!?
@@ -154,7 +154,7 @@ module Fastlane
         UI.message "Adding Pre-Configured UI Unit Tests (*.plist and *.swift) to Test Group '#{scheme_name}'"
 
         files = []
-        Dir["#{config_folder}/*.plist", "#{config_folder}/*.swift"].each do |file|
+        Dir["#{config_folder}*.plist", "#{config_folder}*.swift"].each do |file| # config_folder ends with / already
           UI.message "Adding UI Test Source '#{file}'"
           files << test_group.new_reference(File.absolute_path(file), '<absolute>')
         end
