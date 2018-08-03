@@ -10,10 +10,16 @@ module Fastlane
     #
     class IonicIosConfigSnapshotAction < Action
       def self.run(params)
+        #
+        # Params
+        #
+        scheme_name = params[:ionic_scheme_name]
         workspace_path = params[:ionic_ios_xcode_path]
         target_os = params[:ionic_min_target_ios]
-        scheme_name = params[:ionic_scheme_name]
-
+        
+        #
+        # Copy over unit test files
+        #
         UI.message("Creating New UI Unit Tests for Snapshots, with Scheme #{scheme_name} in #{IonicIntegration::IONIC_IOS_CONFIG_UITESTS_PATH}")
         Fastlane::Helper::IonicIntegrationHelper.copy_ios_sample_tests(scheme_name)
 
