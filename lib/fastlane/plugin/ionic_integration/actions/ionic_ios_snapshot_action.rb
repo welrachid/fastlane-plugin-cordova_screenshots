@@ -49,11 +49,11 @@ module Fastlane
         #
         # Find existing code group
         #
-        snap_group = nil
+        test_group = nil
         proj.groups.each do |g|
           next unless g.name == scheme_name
           g.clear
-          snap_group = g
+          test_group = g
           UI.important "Found existing Code Group #{g.name}. Will be removed."
           break
         end
@@ -62,10 +62,10 @@ module Fastlane
         # Remove existing target and group
         #
         target.nil? || target.remove_from_project
-        snap_group.nil? || snap_group.remove_from_project
+        test_group.nil? || test_group.remove_from_project
 
         target = nil
-        snap_group = nil
+        test_group = nil
 
         #
         # Find existing products groups and remove
@@ -109,7 +109,7 @@ module Fastlane
         # Create new test group
         #
         UI.message "Creating UI Test Group #{scheme_name} for snapshots testing"
-        snap_group = proj.new_group(scheme_name.to_s, File.absolute_path(config_folder), '<absolute>')
+        test_group = proj.new_group(scheme_name.to_s, File.absolute_path(config_folder), '<absolute>')
 
         #
         # Find main target
@@ -139,7 +139,7 @@ module Fastlane
         target.product_reference = product_ref
 
         #
-        # Add dependency
+        # Add main_target as dependency of target
         #
         UI.message "Adding Main Target Dependency: " + main_target.to_s
         target.add_dependency(main_target)
@@ -148,19 +148,19 @@ module Fastlane
         proj.save
 
         #
-        # Add files (fastlane configured UI Unit Tests) into project
+        # Add files (fastlane configured UI Unit Tests) into target (via test group)
         #
         UI.message "Adding Pre-Configured UI Unit Tests (*.plist and *.swift) to Test Group #{scheme_name}"
 
         files = []
         Dir["#{config_folder}/*.plist", "#{config_folder}/*.swift"].each do |file|
           UI.message "Adding UI Test Source #{file}"
-          files << snap_group.new_reference(File.absolute_path(file), '<absolute>')
+          files << test_group.new_reference(File.absolute_path(file), '<absolute>')
         end
         target.add_file_references(files)
 
         #
-        # Project and target metadata
+        # Configure project and target metadata
         #        
         UI.message "Configuring Project Metadata..."
 
