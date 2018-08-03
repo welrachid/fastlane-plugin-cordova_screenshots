@@ -34,23 +34,7 @@ module Fastlane
         end
       end
 
-      def self.generate_xcode_unit_test(config_folder, xcode_project_path, team_id, bundle_id, target_os)
-        #
-        # Params
-        #
-        scheme_name = File.basename(config_folder)
-        xcode_folder = File.dirname(xcode_project_path)
-        project_name = File.basename(xcode_project_path, ".xcodeproj")
-
-        UI.message("Setting up #{scheme_name} as UI Unit Test folder and Scheme in #{xcode_folder} for Xcode Project #{project_name}")
-
-        #
-        # Xcode Project
-        #
-        proj = Xcodeproj::Project.open(xcode_project_path) || UI.user_error!("Unable to Open Xcode Project #{xcode_project_path}")
-
-        UI.message("Xcode Project is Version #{proj.root_object.compatibility_version} Compatible")
-
+      def self.clean_xcode_project(proj, scheme_name)
         #
         # Find existing Target
         #
@@ -95,6 +79,31 @@ module Fastlane
         end
 
         product_ref = nil
+
+        proj
+      end
+
+      def self.generate_xcode_unit_test(config_folder, xcode_project_path, team_id, bundle_id, target_os)
+        #
+        # Params
+        #
+        scheme_name = File.basename(config_folder)
+        xcode_folder = File.dirname(xcode_project_path)
+        project_name = File.basename(xcode_project_path, ".xcodeproj")
+
+        UI.message("Setting up #{scheme_name} as UI Unit Test folder and Scheme in #{xcode_folder} for Xcode Project #{project_name}")
+
+        #
+        # Xcode Project
+        #
+        proj = Xcodeproj::Project.open(xcode_project_path) || UI.user_error!("Unable to Open Xcode Project #{xcode_project_path}")
+
+        UI.message("Xcode Project is Version #{proj.root_object.compatibility_version} Compatible")
+
+        #
+        # Clean Xcode project
+        #
+        proj = clean_xcode_project(proj, scheme_name)
 
         #
         # Create new test group
