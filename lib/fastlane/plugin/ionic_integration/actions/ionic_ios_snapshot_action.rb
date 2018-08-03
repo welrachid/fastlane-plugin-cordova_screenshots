@@ -135,6 +135,7 @@ module Fastlane
         # 
         # "Create" product and put into target
         #
+        product_ref_name = scheme_name + '.xctest'
         product_ref = proj.products_group.find_file_by_path(product_ref_name)
         target.product_reference = product_ref
 
