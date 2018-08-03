@@ -9,11 +9,6 @@ module Fastlane
     # It copies over a sample UI test to our fastlane config folder and runs the IonicSnapShotAction
     #
     class IonicIosConfigSnapshotAction < Action
-      #
-      # Default location for Ionic/Cordova Project generation, ionic plaform add ios
-      #
-      default_scheme_name = IonicIntegration::IONIC_DEFAULT_UNIT_TEST_NAME
-
       def self.run(params)
         workspace_path = params[:ionic_ios_xcode_path]
         target_os = params[:ionic_min_target_ios]
