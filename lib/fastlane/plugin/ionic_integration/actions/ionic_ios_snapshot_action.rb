@@ -41,6 +41,7 @@ module Fastlane
         proj = Xcodeproj::Project.open(xcode_project_path) || UI.user_error!("Unable to Open Xcode Project #{xcode_project_path}")
 
         UI.message("Xcode Project is Version #{proj.root_object.compatibility_version} Compatible")
+
         #
         # Find existing Target and remove it
         #
@@ -94,7 +95,7 @@ module Fastlane
         product_ref_name = scheme_name + '.xctest'
         proj.products_group.files.each do |ref|
           if ref.path == product_ref_name
-            UI.message "Removing old #{ref.path}"
+            UI.important "Removing old #{ref.path}"
             ref.remove_from_project
           end
         end
