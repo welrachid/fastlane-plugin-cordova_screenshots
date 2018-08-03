@@ -4,7 +4,7 @@ module Fastlane
   module Actions
     class IonicIosSnapshotAction < Action
       def self.run(params)
-        UI.message "Configuring Xcode with UI Tests Located in '#{IonicIntegration::IONIC_IOS_CONFIG_UITESTS_PATH}/**'"
+        UI.message "Configuring Xcode with UI Tests located in '#{IonicIntegration::IONIC_IOS_CONFIG_UITESTS_PATH}/**'"
 
         (!params.nil? && !params[:ionic_ios_xcode_path].nil?) || UI.user_error!("Mandatory parameter :ionic_ios_xcode_path not specified")
 
@@ -16,7 +16,7 @@ module Fastlane
         team_id = params[:team_id]
         bundle_id = params[:bundle_id]
 
-        File.exist?(xcode_project) || UI.user_error!("Xcode Project '#{xcode_project}' does not exist!")
+        File.exist?(xcode_project) || UI.user_error!("Xcode project '#{xcode_project}' does not exist!")
 
         #
         # Find all preconfigured UI Unit Tests
@@ -30,6 +30,7 @@ module Fastlane
         # Process each scheme
         #
         schemes.each do |scheme_path|
+          UI.message "Processing scheme: #{scheme_path}..."
           generate_xcode_unit_test(scheme_path, xcode_project, team_id, bundle_id, target_os)
         end
       end
@@ -41,7 +42,7 @@ module Fastlane
         target = nil
         proj.targets.each do |t|
           next unless t.name == scheme_name
-          UI.important "Found existing Target '#{t.name}'. Will be removed."
+          UI.important "Found existing Target '#{t.name}' and removed it."
           target = t
           break
         end
@@ -54,7 +55,7 @@ module Fastlane
           next unless g.name == scheme_name
           g.clear
           test_group = g
-          UI.important "Found existing Code Group '#{g.name}'. Will be removed."
+          UI.important "Found existing Code Group '#{g.name}' and removed it."
           break
         end
 
@@ -73,7 +74,7 @@ module Fastlane
         product_ref_name = scheme_name + '.xctest'
         proj.products_group.files.each do |product_ref|
           if product_ref.path == product_ref_name
-            UI.important "Found existing Code Group '#{product_ref.path}'. Removed it."
+            UI.important "Found existing Code Group '#{product_ref.path}' and removed it."
             product_ref.remove_from_project
           end
         end
@@ -91,14 +92,14 @@ module Fastlane
         xcode_folder = File.dirname(xcode_project_path)
         project_name = File.basename(xcode_project_path, ".xcodeproj")
 
-        UI.message("Setting up '#{scheme_name}' as UI Unit Test folder and Scheme in '#{xcode_folder}' for Xcode Project '#{project_name}'")
+        UI.message("Setting up '#{scheme_name}' as UI Unit Test folder and Scheme in '#{xcode_folder}' for Xcode project '#{project_name}'")
 
         #
         # Xcode Project
         #
-        proj = Xcodeproj::Project.open(xcode_project_path) || UI.user_error!("Unable to Open Xcode Project '#{xcode_project_path}'")
+        proj = Xcodeproj::Project.open(xcode_project_path) || UI.user_error!("Unable to open Xcode project '#{xcode_project_path}'")
 
-        UI.message("Xcode Project is version '#{proj.root_object.compatibility_version}' compatible")
+        UI.message("Xcode project is version '#{proj.root_object.compatibility_version}' compatible")
 
         #
         # Clean Xcode project
@@ -151,7 +152,7 @@ module Fastlane
         #
         # Add files (fastlane configured UI Unit Tests) into target (via test group)
         #
-        UI.message "Adding Pre-Configured UI Unit Tests (*.plist and *.swift) to Test Group '#{scheme_name}'"
+        UI.message "Adding Pre-Configured UI Unit Tests (*.plist and *.swift) to Test Group '#{scheme_name}'..."
 
         files = []
         Dir["#{config_folder}*.plist", "#{config_folder}*.swift"].each do |file| # config_folder ends with / already
@@ -163,7 +164,7 @@ module Fastlane
         #
         # Configure project and target metadata
         #        
-        UI.message "Configuring Project Metadata..."
+        UI.message "Configuring Project Metadata"
 
         target_config = {
           CreatedOnToolsVersion: "8.2",
