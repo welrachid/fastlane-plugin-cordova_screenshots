@@ -9,7 +9,7 @@ module Fastlane
         (!params.nil? && !params[:ionic_ios_xcode_path].nil?) || UI.user_error!("Mandatory parameter :ionic_ios_xcode_path not specified")
 
         #
-        # Deduce the name of the xcode project we are looking for...
+        # Params
         #
         xcode_project = params[:ionic_ios_xcode_path]
         target_os = params[:ionic_min_target_ios]
@@ -17,56 +17,65 @@ module Fastlane
         bundle_id = params[:bundle_id]
 
         File.exist?(xcode_project) || UI.user_error!("Xcode Project #{xcode_project} does not exist!")
+
         #
         # Find all preconfigured UI Unit Tests
         #
         schemes = Dir.glob("#{IonicIntegration::IONIC_IOS_CONFIG_UITESTS_PATH}/*/").reject do |d|
           d =~ /^\.{1,2}$/
         end
-
         UI.message "Found #{schemes}..."
+
+        #
+        # Process each scheme
+        #
         schemes.each do |scheme_path|
-          # UI.message("Processing Test Scheme #{scheme_path}")
           generate_xcode_unit_test(scheme_path, xcode_project, team_id, bundle_id, target_os)
         end
       end
 
       def self.generate_xcode_unit_test(config_folder, xcode_project_path, team_id, bundle_id, target_os)
+        #
+        # Params
+        #
         scheme_name = File.basename(config_folder)
         xcode_folder = File.dirname(xcode_project_path)
         project_name = File.basename(xcode_project_path, ".xcodeproj")
 
         UI.message("Setting up #{scheme_name} as UI Unit Test folder and Scheme in #{xcode_folder} for Xcode Project #{project_name}")
 
+        #
+        # Xcode Project
+        #
         proj = Xcodeproj::Project.open(xcode_project_path) || UI.user_error!("Unable to Open Xcode Project #{xcode_project_path}")
 
         UI.message("Xcode Project is Version #{proj.root_object.compatibility_version} Compatible")
 
         #
-        # Find existing Target and remove it
+        # Find existing Target
         #
         target = nil
         proj.targets.each do |t|
           next unless t.name == scheme_name
-          UI.important "Found existing Target #{t.name}. Will be replaced."
+          UI.important "Found existing Target #{t.name}. Will be removed."
           target = t
           break
         end
 
         #
-        # Find existing code group or unit tests and remove if needed.
+        # Find existing code group
         #
         snap_group = nil
         proj.groups.each do |g|
           next unless g.name == scheme_name
           g.clear
           snap_group = g
-          UI.important "Found existing Code Group #{g.name}. Will be replaced."
+          UI.important "Found existing Code Group #{g.name}. Will be removed."
           break
         end
 
         #
-        # Remove existing targets and groups if required.
+        # Remove existing target and group
         #
         target.nil? || target.remove_from_project
         snap_group.nil? || snap_group.remove_from_project
@@ -75,11 +84,27 @@ module Fastlane
         snap_group = nil
 
         #
-        # Ok, let's rock and roll
+        # Find existing products groups and remove
+        #
+        product_ref_name = scheme_name + '.xctest'
+        proj.products_group.files.each do |product_ref|
+          if product_ref.path == product_ref_name
+            UI.important "Found existing Code Group #{product_ref.path}. Removed it."
+            product_ref.remove_from_project
+          end
+        end
+
+        product_ref = nil
+
+        #
+        # Create new test group
         #
         UI.message "Creating UI Test Group #{scheme_name} for snapshots testing"
         snap_group = proj.new_group(scheme_name.to_s, File.absolute_path(config_folder), '<absolute>')
 
+        #
+        # Find main target
+        #
         UI.message "Finding Main Target (of the Project)..."
         main_target = nil
         proj.root_object.targets.each do |t|
@@ -91,53 +116,51 @@ module Fastlane
 
         main_target || UI.user_error!("Unable to locate Main Target for Ionic App in #{project_name}")
 
-        # Create a product for our ui unit test
-        product_ref_name = scheme_name + '.xctest'
-        proj.products_group.files.each do |ref|
-          if ref.path == product_ref_name
-            UI.important "Removing old #{ref.path}"
-            ref.remove_from_project
-          end
-        end
+        #
+        # Create new target
+        #
+        target = Xcodeproj::Project::ProjectHelper.new_target(
+          proj, :ui_test_bundle, scheme_name, :ios, target_os, proj.products_group, :swift
+        )
 
-        # product_ref.nil? || product_ref.remove_from_project
-
-        # product_ref = proj.products_group.new_reference(product_ref_name, :built_products)
-
-        target = Xcodeproj::Project::ProjectHelper.new_target(proj, :ui_test_bundle,
-                                                              scheme_name, :ios, target_os, proj.products_group, :swift)
-
+        # 
+        # "Create" product and put into target
+        #
         product_ref = proj.products_group.find_file_by_path(product_ref_name)
         target.product_reference = product_ref
 
+        #
+        # Add dependency
+        #
         UI.message "Adding Main Target Dependency: " + main_target.to_s
         target.add_dependency(main_target)
 
-        # We need to save here for some reason... xcodeproj?
+        # We need to save here for some reason... xcodeproj!?
         proj.save
 
+        #
+        # Add files (fastlane configured UI Unit Tests) into project
+        #
         UI.message "Adding Pre-Configured UI Unit Tests (*.plist and *.swift) to Test Group #{scheme_name}"
-        files = []
 
-        # Link our fastlane configured UI Unit Tests into the project
+        files = []
         Dir["#{config_folder}/*.plist", "#{config_folder}/*.swift"].each do |file|
           UI.message "Adding UI Test Source #{file}"
           files << snap_group.new_reference(File.absolute_path(file), '<absolute>')
         end
-
         target.add_file_references(files)
 
+        #
+        # Project and target metadata
+        #        
         UI.message "Configuring Project Metadata..."
 
-        # We may need to switch here on compatibility versions, this is for Xcode 8.0
-        # Fasten your seatbelts, it gets bumpy from here on in..
         target_config = {
-            CreatedOnToolsVersion: "8.2",
-                  DevelopmentTeam: team_id,
-                  ProvisioningStyle: "Automatic",
-                  TestTargetID: main_target.uuid
+          CreatedOnToolsVersion: "8.2",
+          DevelopmentTeam: team_id,
+          ProvisioningStyle: "Automatic",
+          TestTargetID: main_target.uuid
         }
-
         if proj.root_object.attributes['TargetAttributes']
           proj.root_object.attributes['TargetAttributes'].store(target.uuid, target_config)
         elsif
@@ -153,22 +176,31 @@ module Fastlane
         target.build_configuration_list.set_setting('LD_RUNPATH_SEARCH_PATHS', "$(inherited) @executable_path/Frameworks @loader_path/Frameworks")
         target.build_configuration_list.set_setting('DEVELOPMENT_TEAM', team_id)
 
+        #
         # Create a shared scheme for the UI tests
-        existing_scheme = Xcodeproj::XCScheme.shared_data_dir(xcode_project_path) + "/#{scheme_name}.xcscheme"
-
+        #
         UI.message "Generating XCode Scheme #{scheme_name} to run UI Snapshot Tests"
+        existing_scheme = Xcodeproj::XCScheme.shared_data_dir(xcode_project_path) + "/#{scheme_name}.xcscheme"
         scheme = File.exist?(existing_scheme) ? Xcodeproj::XCScheme.new(existing_scheme) : Xcodeproj::XCScheme.new
 
+        #
+        # Add target and main target to scheme
+        #
         scheme.add_test_target(target)
-
         scheme.add_build_target(main_target)
         scheme.set_launch_target(main_target)
 
+        #
+        # Save scheme and project
+        #
         scheme.save_as(xcode_project_path, scheme_name)
+        proj.save
 
+        #
+        # Success
+        #
         UI.success "Completed Retrofit of #{scheme_name} in Ionic Generated XCode Project #{project_name} OK... SAVING"
 
-        proj.save
       end
 
       def self.description
