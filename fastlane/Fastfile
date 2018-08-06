@@ -2,7 +2,7 @@ platform :ios do
 
   before_all do
     #
-    # This will retrofit any existing schemes in fastlane/ionic/config/ios/ui-tests/
+    # This will retrofit any existing schemes in fastlane/cordova_screenshots/ios/ui-tests/
     #
     ionic_ios_snapshot(
     	team_id: "[YOUR TEAM ID]"

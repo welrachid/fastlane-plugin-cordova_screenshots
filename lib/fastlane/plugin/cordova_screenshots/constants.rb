@@ -3,7 +3,7 @@ module Fastlane
     IONIC_IOS_BUILD_PATH = "platforms/ios"
     DEFAULT_IOS_VERSION = "9.0"
 
-    IONIC_CONFIG_PATH = "fastlane/ionic/config"
+    IONIC_CONFIG_PATH = "fastlane/cordova_screenshots"
     IONIC_IOS_CONFIG_PATH = IONIC_CONFIG_PATH + "/ios"
     IONIC_IOS_CONFIG_UITESTS_PATH = IONIC_IOS_CONFIG_PATH + "/ui-tests"
 
