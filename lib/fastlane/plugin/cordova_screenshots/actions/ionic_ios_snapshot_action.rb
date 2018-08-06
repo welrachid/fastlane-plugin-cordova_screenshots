@@ -60,7 +60,7 @@ module Fastlane
         #
         # Add new Unit Tests to Xcode projects
         #
-        proj = add_unit_tests_to_xcode_project(proj, scheme_name, config_folder, project_name, target_os)
+        proj = add_unit_tests_to_xcode_project(proj, scheme_name, config_folder, project_name, target_os, team_id, bundle_id, xcode_project_path)
 
         #
         # Success
