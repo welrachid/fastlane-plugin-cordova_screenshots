@@ -2,7 +2,7 @@
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'fastlane/plugin/cordova_screenehots/version'
+require 'fastlane/plugin/cordova_screenshots/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'fastlane-plugin-cordova_screenshots'
