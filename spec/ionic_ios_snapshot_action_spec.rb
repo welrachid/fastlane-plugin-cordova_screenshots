@@ -11,17 +11,17 @@ describe Fastlane::Actions::IonicIosSnapshotAction do
         #
         resources_path = File.dirname(__FILE__) + "/resources/platforms/ios"
 
-        FakeFS::FileSystem.clone(resources_path, Fastlane::IonicIntegration::IONIC_IOS_BUILD_PATH.to_s)
-        FakeFS::FileSystem.clone("#{Fastlane::Helper::IonicIntegrationHelper::IOS_RESOURCES_PATH}/#{Fastlane::IonicIntegration::IONIC_DEFAULT_UNIT_TEST_NAME}")
+        FakeFS::FileSystem.clone(resources_path, Fastlane::CordovaScreenshots::IONIC_IOS_BUILD_PATH.to_s)
+        FakeFS::FileSystem.clone("#{Fastlane::Helper::CordovaScreenshotsHelper::IOS_RESOURCES_PATH}/#{Fastlane::CordovaScreenshots::IONIC_DEFAULT_UNIT_TEST_NAME}")
 
-        Fastlane::Helper::IonicIntegrationHelper.copy_ios_sample_tests("first-test")
-        Fastlane::Helper::IonicIntegrationHelper.copy_ios_sample_tests("second-test")
+        Fastlane::Helper::CordovaScreenshotsHelper.copy_ios_sample_tests("first-test")
+        Fastlane::Helper::CordovaScreenshotsHelper.copy_ios_sample_tests("second-test")
 
         expect(Fastlane::Actions::IonicIosSnapshotAction).to receive(:generate_xcode_unit_test).twice.and_call_original
 
         Fastlane::Actions::IonicIosSnapshotAction.run(
-          ionic_ios_xcode_path: Fastlane::Helper::IonicIntegrationHelper.find_default_ios_xcode_workspace,
-          ionic_min_target_ios: Fastlane::IonicIntegration::DEFAULT_IOS_VERSION,
+          ionic_ios_xcode_path: Fastlane::Helper::CordovaScreenshotsHelper.find_default_ios_xcode_workspace,
+          ionic_min_target_ios: Fastlane::CordovaScreenshots::DEFAULT_IOS_VERSION,
           team_id: "ABC1234",
           bundle_id: "ie.lv.test.bundle"
         )

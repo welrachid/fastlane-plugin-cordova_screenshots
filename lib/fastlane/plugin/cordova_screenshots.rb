@@ -1,8 +1,8 @@
-require 'fastlane/plugin/ionic_integration/version'
-require 'fastlane/plugin/ionic_integration/constants'
+require 'fastlane/plugin/cordova_screenshots/version'
+require 'fastlane/plugin/cordova_screenshots/constants'
 
 module Fastlane
-  module IonicIntegration
+  module CordovaScreenshots
     # Return all .rb files inside the "actions" and "helper" directory
     def self.all_classes
       Dir[File.expand_path('**/{actions,helper}/*.rb', File.dirname(__FILE__))]
@@ -12,6 +12,6 @@ end
 
 # By default we want to import all available actions and helpers
 # A plugin can contain any number of actions and plugins
-Fastlane::IonicIntegration.all_classes.each do |current|
+Fastlane::CordovaScreenshots.all_classes.each do |current|
   require current
 end

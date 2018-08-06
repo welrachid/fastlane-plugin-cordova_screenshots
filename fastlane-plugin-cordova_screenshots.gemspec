@@ -2,16 +2,16 @@
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'fastlane/plugin/ionic_integration/version'
+require 'fastlane/plugin/cordova_screenehots/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'fastlane-plugin-ionic_integration'
-  spec.version       = Fastlane::IonicIntegration::VERSION
-  spec.author        = 'Adrian Regan'
-  spec.email         = 'adrian.regan@gmail.com'
+  spec.name          = 'fastlane-plugin-cordova_screenshots'
+  spec.version       = Fastlane::CordovaScreenshots::VERSION
+  spec.author        = 'Jan Piotrowski'
+  spec.email         = 'piotrowski@gmail.com'
 
-  spec.summary       = 'Integrating Fastlane with Ionic Generated Projects'
-  spec.homepage      = "https://github.com/knocknarea/fastlane-plugin-ionic_integration"
+  spec.summary       = 'Take screenshots of your Cordova/Ionic app with fastlane'
+  spec.homepage      = "https://github.com/janpio/fastlane-plugin-cordova_screenshots"
   spec.license       = "MIT"
 
   spec.files         = Dir["lib/**/*"] + %w(README.md LICENSE)

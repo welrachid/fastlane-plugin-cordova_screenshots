@@ -1,5 +1,5 @@
 module Fastlane
-  module IonicIntegration
+  module CordovaScreenshots
     VERSION = "0.2.0"
   end
 end

@@ -1,5 +1,5 @@
 module Fastlane
-  module IonicIntegration
+  module CordovaScreenshots
     IONIC_IOS_BUILD_PATH = "platforms/ios"
     DEFAULT_IOS_VERSION = "9.0"
 
