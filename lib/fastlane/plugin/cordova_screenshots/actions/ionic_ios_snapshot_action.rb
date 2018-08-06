@@ -99,9 +99,6 @@ module Fastlane
         target.nil? || target.remove_from_project
         test_group.nil? || test_group.remove_from_project
 
-        target = nil
-        test_group = nil
-
         #
         # Find existing products groups and remove
         #
@@ -112,8 +109,6 @@ module Fastlane
             product_ref.remove_from_project
           end
         end
-
-        product_ref = nil
 
         proj
       end

@@ -47,11 +47,11 @@ When you open up Xcode and open the file `ionic-screen-shots/ui-snapshots.swift`
         // Place your own tests here. This is a starter example to get you going..
         //
         snapshot("app-launch")
-        
+
         // XCUIApplication().buttons["Your Button Name"].tap()
-        
+
         // snapshot("after-button-pressed")
-                
+
     }
 ```
 
@@ -99,14 +99,14 @@ platform :ios do
     # This will retrofit any existing schemes in fastlane/cordova_screenshots/ios/
     #
     ionic_ios_snapshot(
-    	team_id: "[YOUR TEAM ID]"
-    	bundle_id: "[YOUR APP BUNDLE ID]"
+      team_id: "[YOUR TEAM ID]",
+      bundle_id: "[YOUR APP BUNDLE ID]"
     )
   end
 
   lane :release do
-  	# This will run the retrofitted UI Tests for you and create snapshots... :-)
-  	snapshot(
+    # This will run the retrofitted UI Tests for you and create snapshots... :-)
+    snapshot(
       output_simulator_logs: true,
       reinstall_app: false,
       erase_simulator: true,
@@ -132,12 +132,13 @@ The iOS part of this plugin is fully based on knocknarea's excellent [`fastlane-
 
 To run both the tests, and code style validation, run
 
-```
+```shell
 rake
 ```
 
 To automatically fix many of the styling issues, use
-```
+
+```shell
 rubocop -a
 ```
 
@@ -156,4 +157,3 @@ For more information about how the `fastlane` plugin system works, check out the
 ## About _fastlane_
 
 _fastlane_ is the easiest way to automate beta deployments and releases for your iOS and Android apps. To learn more, check out [fastlane.tools](https://fastlane.tools).
-

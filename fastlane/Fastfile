@@ -19,4 +19,5 @@ platform :ios do
       scheme: "ionic-screen-shots" # The name of a scheme to use, one that you generated with ionic_ios_config_snapshot
     )
   end
+  
 end
