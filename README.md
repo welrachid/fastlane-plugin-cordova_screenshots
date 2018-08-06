@@ -14,9 +14,9 @@ fastlane add_plugin cordova_screenshots
 
 ## About cordova_screenshots
 
-This plugin enables you do create automated screenshots of your Cordova (or Ionic) project for iOS <!--  TODO , both for iOS or Android, --> with _fastlane_ using the normal `capture_ios_screenshots` (`snapshot`) <!-- TODO and `capture_android_screenshots` (`screengrab`) --> actions.
+This plugin enables you do create automated screenshots of your Cordova (or Ionic) project for iOS <!--  TODO , both for iOS or Android, --> with _fastlane_ using the normal `capture_ios_screenshots` (`snapshot`) <!-- TODO and `capture_android_screenshots` (`screengrab`) --> action<!-- TODO s -->.
 
-Usually this is a challenge, as both require you to modify your native projects and add some files. As Cordova projects are generated for you and not tracked by version control, those changes would get lost frequently.
+Usually this is a challenge, as <!-- TODO both require --> it you to modify your native projects and add some files. As Cordova projects are generated for you and not tracked by version control, those changes would get lost frequently.
 
 By keeping your test files in your `fastlane` folder and offering a simple action to "patch" your native projects each time before running the screenshot creation process, this plugin offers a way around that.
 
