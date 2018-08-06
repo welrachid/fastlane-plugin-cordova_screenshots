@@ -2,17 +2,17 @@
 
 WORK IN PROGRESS!
 
-[![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-ionic_integration)
+[![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-cordova_screenshots)
 
-## Getting Started 
+## Getting Started
 
-This project is a [_fastlane_](https://github.com/fastlane/fastlane) plugin. To get started with `fastlane-plugin-ionic_integration`, add it to your project by running:
+This project is a [_fastlane_](https://github.com/fastlane/fastlane) plugin. To get started with `fastlane-plugin-cordova_screenshots`, add it to your project by running:
 
 ```bash
-fastlane add_plugin ionic_integration
+fastlane add_plugin cordova_screenshots
 ```
 
-## About ionic_integration
+## About cordova_screenshots
 
 This plugin enables you do create automated screenshots of your Cordova (or Ionic) project for iOS <!--  TODO , both for iOS or Android, --> with _fastlane_ using the normal `capture_ios_screenshots` (`snapshot`) <!-- TODO and `capture_android_screenshots` (`screengrab`) --> actions.
 
@@ -123,6 +123,10 @@ There is also no limit to the number of different schemes you can create and use
 ## Example
 
 Check out the [example `Fastfile`](fastlane/Fastfile) to see how to use this plugin. Try it by cloning the repo, running `fastlane install_plugins` and `bundle exec fastlane test`.
+
+## Acknowledgement
+
+The iOS part of this plugin is fully based on knocknarea's excellent [`fastlane-plugin-ionic_integration`](https://github.com/knocknarea/fastlane-plugin-ionic_integration). I forked and simplified his existing plugin and added the Android implementation.
 
 ## Run tests for this plugin
 
