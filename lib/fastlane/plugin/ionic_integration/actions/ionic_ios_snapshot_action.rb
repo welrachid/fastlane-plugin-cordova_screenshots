@@ -35,6 +35,40 @@ module Fastlane
         end
       end
 
+      def self.generate_xcode_unit_test(config_folder, xcode_project_path, team_id, bundle_id, target_os)
+        #
+        # Names and Folders
+        #
+        scheme_name = File.basename(config_folder)
+        xcode_folder = File.dirname(xcode_project_path)
+        project_name = File.basename(xcode_project_path, ".xcodeproj")
+
+        UI.message("Setting up '#{scheme_name}' as UI Unit Test folder and Scheme in '#{xcode_folder}' for Xcode project '#{project_name}'")
+
+        #
+        # Xcode Project
+        #
+        proj = Xcodeproj::Project.open(xcode_project_path) || UI.user_error!("Unable to open Xcode project '#{xcode_project_path}'")
+
+        UI.message("Xcode project is version '#{proj.root_object.compatibility_version}' compatible")
+
+        #
+        # Clean Xcode project
+        #
+        proj = clean_xcode_project(proj, scheme_name)
+
+        #
+        # Add new Unit Tests to Xcode projects
+        #
+        proj = add_unit_tests_to_xcode_project(proj, scheme_name, config_folder, project_name, target_os)
+
+        #
+        # Success
+        #
+        UI.success "Completed retrofit of '#{scheme_name}' into generated Xcode Project '#{project_name}'."
+
+      end
+
       def self.clean_xcode_project(proj, scheme_name)
         #
         # Find existing Target
@@ -84,29 +118,8 @@ module Fastlane
         proj
       end
 
-      def self.generate_xcode_unit_test(config_folder, xcode_project_path, team_id, bundle_id, target_os)
-        #
-        # Params
-        #
-        scheme_name = File.basename(config_folder)
-        xcode_folder = File.dirname(xcode_project_path)
-        project_name = File.basename(xcode_project_path, ".xcodeproj")
-
-        UI.message("Setting up '#{scheme_name}' as UI Unit Test folder and Scheme in '#{xcode_folder}' for Xcode project '#{project_name}'")
-
-        #
-        # Xcode Project
-        #
-        proj = Xcodeproj::Project.open(xcode_project_path) || UI.user_error!("Unable to open Xcode project '#{xcode_project_path}'")
-
-        UI.message("Xcode project is version '#{proj.root_object.compatibility_version}' compatible")
-
-        #
-        # Clean Xcode project
-        #
-        proj = clean_xcode_project(proj, scheme_name)
-
-        #
+      def self.add_unit_tests_to_xcode_project(proj, scheme_name, config_folder, project_name, target_os)
+                #
         # Create new test group
         #
         UI.message "Creating UI Test Group '#{scheme_name}' for snapshots testing"
@@ -207,11 +220,7 @@ module Fastlane
         scheme.save_as(xcode_project_path, scheme_name)
         proj.save
 
-        #
-        # Success
-        #
-        UI.success "Completed retrofit of '#{scheme_name}' into generated Xcode Project '#{project_name}'."
-
+        proj
       end
 
       def self.description
