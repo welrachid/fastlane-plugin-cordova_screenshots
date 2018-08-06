@@ -142,9 +142,7 @@ module Fastlane
         #
         # Create new target
         #
-        target = Xcodeproj::Project::ProjectHelper.new_target(
-          proj, :ui_test_bundle, scheme_name, :ios, target_os, proj.products_group, :swift
-        )
+        target = proj.new_target(:ui_test_bundle, scheme_name, :ios, target_os, proj.products_group, :swift)
 
         # 
         # "Create" product and put into target
