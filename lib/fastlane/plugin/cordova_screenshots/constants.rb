@@ -5,7 +5,6 @@ module Fastlane
 
     IONIC_CONFIG_PATH = "fastlane/cordova_screenshots"
     IONIC_IOS_CONFIG_PATH = IONIC_CONFIG_PATH + "/ios"
-    IONIC_IOS_CONFIG_UITESTS_PATH = IONIC_IOS_CONFIG_PATH + "/ui-tests"
 
     IONIC_DEFAULT_UNIT_TEST_NAME = "ui-snapshots"
   end

@@ -4,7 +4,7 @@ module Fastlane
   module Actions
     class IonicIosSnapshotAction < Action
       def self.run(params)
-        UI.message "Configuring Xcode with UI Tests located in '#{CordovaScreenshots::IONIC_IOS_CONFIG_UITESTS_PATH}/**'"
+        UI.message "Configuring Xcode with UI Tests located in '#{CordovaScreenshots::IONIC_IOS_CONFIG_PATH}/**'"
 
         (!params.nil? && !params[:ionic_ios_xcode_path].nil?) || UI.user_error!("Mandatory parameter :ionic_ios_xcode_path not specified")
 
@@ -21,7 +21,7 @@ module Fastlane
         #
         # Find all preconfigured UI Unit Tests
         #
-        schemes = Dir.glob("#{CordovaScreenshots::IONIC_IOS_CONFIG_UITESTS_PATH}/*/").reject do |d|
+        schemes = Dir.glob("#{CordovaScreenshots::IONIC_IOS_CONFIG_PATH}/*/").reject do |d|
           d =~ /^\.{1,2}$/ # excludes . and ..
         end
         UI.message "Found schemes: #{schemes}"
@@ -108,7 +108,7 @@ module Fastlane
         product_ref_name = scheme_name + '.xctest'
         proj.products_group.files.each do |product_ref|
           if product_ref.path == product_ref_name
-            UI.important "Found existing Code Group '#{product_ref.path}' and removed it."
+            UI.important "Found existing Product Group '#{product_ref.path}' and removed it."
             product_ref.remove_from_project
           end
         end
@@ -118,8 +118,8 @@ module Fastlane
         proj
       end
 
-      def self.add_unit_tests_to_xcode_project(proj, scheme_name, config_folder, project_name, target_os)
-                #
+      def self.add_unit_tests_to_xcode_project(proj, scheme_name, config_folder, project_name, target_os, team_id, bundle_id, xcode_project_path)
+        #
         # Create new test group
         #
         UI.message "Creating UI Test Group '#{scheme_name}' for snapshots testing"

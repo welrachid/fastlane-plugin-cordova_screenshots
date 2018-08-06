@@ -35,9 +35,9 @@ describe Fastlane::Helper::CordovaScreenshotsHelper do
     it 'should create sample' do
       FakeFS.with_fresh do
         FakeFS::FileSystem.clone("#{Fastlane::Helper::CordovaScreenshotsHelper::IOS_RESOURCES_PATH}/#{Fastlane::CordovaScreenshots::IONIC_DEFAULT_UNIT_TEST_NAME}")
-        # FileUtils.mkdir_p "#{Fastlane::CordovaScreenshots::IONIC_IOS_CONFIG_UITESTS_PATH}/my-sample"
+        # FileUtils.mkdir_p "#{Fastlane::CordovaScreenshots::IONIC_IOS_CONFIG_PATH}/my-sample"
 
-        expected_path = "#{Fastlane::CordovaScreenshots::IONIC_IOS_CONFIG_UITESTS_PATH}/my-sample"
+        expected_path = "#{Fastlane::CordovaScreenshots::IONIC_IOS_CONFIG_PATH}/my-sample"
 
         Fastlane::Helper::CordovaScreenshotsHelper.copy_ios_sample_tests("my-sample")
 

@@ -19,7 +19,7 @@ module Fastlane
       def self.copy_ios_sample_tests(scheme_name)
         ios_resources_path = File.expand_path("#{HELPER_PATH}/../resources/ios")
         source_folder = "#{ios_resources_path}/#{CordovaScreenshots::IONIC_DEFAULT_UNIT_TEST_NAME}"
-        dest_folder = "#{CordovaScreenshots::IONIC_IOS_CONFIG_UITESTS_PATH}/#{scheme_name}"
+        dest_folder = "#{CordovaScreenshots::IONIC_IOS_CONFIG_PATH}/#{scheme_name}"
         copy_all_files(source_folder, dest_folder)
       end
 

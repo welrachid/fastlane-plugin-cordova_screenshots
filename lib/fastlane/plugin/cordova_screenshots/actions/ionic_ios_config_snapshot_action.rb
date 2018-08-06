@@ -20,7 +20,7 @@ module Fastlane
         #
         # Copy over unit test files
         #
-        UI.message("Creating New UI Unit Tests for Snapshots, with Scheme '#{scheme_name}' in '#{CordovaScreenshots::IONIC_IOS_CONFIG_UITESTS_PATH}'")
+        UI.message("Creating New UI Unit Tests for Snapshots, with Scheme '#{scheme_name}' in '#{CordovaScreenshots::IONIC_IOS_CONFIG_PATH}'")
         Fastlane::Helper::CordovaScreenshotsHelper.copy_ios_sample_tests(scheme_name)
 
         #
@@ -53,7 +53,7 @@ module Fastlane
 
       def self.details
         # Optional:
-        "Creates a set of UI Unit Tests in '#{CordovaScreenshots::IONIC_IOS_CONFIG_UITESTS_PATH}' and configures an existing Cordova/Ionic generated Xcode projec to use them"
+        "Creates a set of UI Unit Tests in '#{CordovaScreenshots::IONIC_IOS_CONFIG_PATH}' and configures an existing Cordova/Ionic generated Xcode projec to use them"
       end
 
       def self.available_options
