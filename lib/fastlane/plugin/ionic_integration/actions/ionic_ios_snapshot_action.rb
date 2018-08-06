@@ -22,7 +22,7 @@ module Fastlane
         # Find all preconfigured UI Unit Tests
         #
         schemes = Dir.glob("#{IonicIntegration::IONIC_IOS_CONFIG_UITESTS_PATH}/*/").reject do |d|
-          d =~ /^\.{1,2}$/
+          d =~ /^\.{1,2}$/ # excludes . and ..
         end
         UI.message "Found schemes: #{schemes}"
 
