@@ -1,12 +1,11 @@
 module Fastlane
   module CordovaScreenshots
-    IONIC_IOS_BUILD_PATH = "platforms/ios"
-    DEFAULT_IOS_VERSION = "9.0"
+    CORDOVA_SCREENSHOTS_CONFIG_PATH = "fastlane/cordova_screenshots"
+    CORDOVA_SCREENSHOTS_IOS_CONFIG_PATH = CORDOVA_SCREENSHOTS_CONFIG_PATH + "/ios"
+    CORDOVA_SCREENSHOTS_ANDROID_CONFIG_PATH = CORDOVA_SCREENSHOTS_CONFIG_PATH + "/android"
 
-    IONIC_CONFIG_PATH = "fastlane/cordova_screenshots"
-    IONIC_IOS_CONFIG_PATH = IONIC_CONFIG_PATH + "/ios"
-    IONIC_ANDROID_CONFIG_PATH = IONIC_CONFIG_PATH + "/android"
-
-    IONIC_DEFAULT_UNIT_TEST_NAME = "ui-snapshots"
+    CORDOVA_SCREENSHOTS_IOS_BUILD_PATH = "platforms/ios"
+    CORDOVA_SCREENSHOTS_DEFAULT_IOS_VERSION = "9.0"
+    CORDOVA_SCREENSHOTS_DEFAULT_IOS_UNIT_TEST_NAME = "ui-snapshots" # TODO scheme_name vs. test_name
   end
 end

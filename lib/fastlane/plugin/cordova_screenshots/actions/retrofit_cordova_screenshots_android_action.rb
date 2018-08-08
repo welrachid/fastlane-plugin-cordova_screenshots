@@ -2,21 +2,18 @@ require 'xcodeproj'
 
 module Fastlane
   module Actions
-    class RetrofitAndroidCordovaScreenshotsAction < Action
+    class RetrofitCordovaScreenshotsAndroidAction < Action
       def self.run(params)
-        UI.message "RetrofitAndroidCordovaScreenshotsAction"
+        UI.message "Retrofitting Android UI test from '#{CordovaScreenshots::CORDOVA_SCREENSHOTS_ANDROID_CONFIG_PATH}' into Cordova Android project."
+
         package_name = params[:package_name]
         package_name_path = package_name.gsub('.', '/')
 
-        # copy over test file to `platforms\android\app\src\androidTest\java\...\ScreengrabTest.java` (... = io\ionic\starter)
-        Fastlane::Helper::CordovaScreenshotsHelper.copy_android_test_file(package_name_path)
-
-        # copy over build-extras.gradle to `platforms\android\app`
+        Fastlane::Helper::CordovaScreenshotsHelper.copy_android_test(package_name_path)
         Fastlane::Helper::CordovaScreenshotsHelper.copy_android_build_extras_gradle
-
-        # copy over AndroidManifest.xml to `platforms\android\app\src\debug`
         Fastlane::Helper::CordovaScreenshotsHelper.copy_android_manifest(package_name)
 
+        UI.success("Done. Build your test app (TODO) and then run `fastlane screengrab` to take screenshots.")
       end
 
       def self.description
@@ -41,7 +38,6 @@ module Fastlane
             FastlaneCore::ConfigItem.new(key: :package_name,
                 env_name: 'CORDOVA_SCREENSHOTS_PACKAGE_NAME',
                 description: "The package name of the app under test (e.g. com.yourcompany.yourapp)",
-                code_gen_sensitive: true,
                 default_value: CredentialsManager::AppfileConfig.try_fetch_value(:package_name),
                 optional: false)
         ]

@@ -3,18 +3,18 @@ require 'fastlane/plugin/cordova_screenshots/constants'
 module Fastlane
   module Actions
 
-    class CreateAndroidCordovaScreenshotsFilesAction < Action
+    class InitCordovaScreenshotsAndroidAction < Action
       def self.run(params)       
         package_name = params[:package_name]
 
-        UI.message("Creating new Android UI test in '#{CordovaScreenshots::IONIC_ANDROID_CONFIG_PATH}'")
+        UI.message("Creating new Android UI test in '#{CordovaScreenshots::CORDOVA_SCREENSHOTS_ANDROID_CONFIG_PATH}'")
         Fastlane::Helper::CordovaScreenshotsHelper.copy_android_sample_test(package_name)
         
-        UI.success("Created Android UI test. Call the `retrofit_android_cordova_screenshots` action to integrate it into your Android project.")
+        UI.success("Done. Call the `retrofit_cordova_screenshots_android` action to integrate it into your Cordova Android project.")
       end
 
       def self.description
-        "Creates a sample Android test file in '#{CordovaScreenshots::IONIC_ANDROID_CONFIG_PATH}'"
+        "Creates an Android UI test in '#{CordovaScreenshots::CORDOVA_SCREENSHOTS_ANDROID_CONFIG_PATH}'"
       end
 
       def self.authors
@@ -35,7 +35,6 @@ module Fastlane
             FastlaneCore::ConfigItem.new(key: :package_name,
                 env_name: 'CORDOVA_SCREENSHOTS_PACKAGE_NAME',
                 description: "The package name of the app under test (e.g. com.yourcompany.yourapp)",
-                code_gen_sensitive: true,
                 default_value: CredentialsManager::AppfileConfig.try_fetch_value(:package_name),
                 optional: false)
         ]
