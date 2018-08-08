@@ -29,6 +29,32 @@ module Fastlane
       def self.find_default_ios_xcode_workspace
         Dir["#{CordovaScreenshots::IONIC_IOS_BUILD_PATH}/*.xcodeproj"].last || nil
       end
+
+      def self.copy_android_sample_test()
+        android_resources_path = File.expand_path("#{HELPER_PATH}/../resources/android")
+        Dir.exist?(CordovaScreenshots::IONIC_ANDROID_CONFIG_PATH) || FileUtils.mkdir_p(CordovaScreenshots::IONIC_ANDROID_CONFIG_PATH)
+        FileUtils.cp("#{android_resources_path}/ScreengrabTest.java", "#{CordovaScreenshots::IONIC_ANDROID_CONFIG_PATH}")
+      end
+
+      def self.copy_android_test_file(package_name_path, package_name)
+        test_path = "platforms/android/app/src/androidTest/java/#{package_name_path}"
+        Dir.exist?(test_path) || FileUtils.mkdir_p(test_path)
+        FileUtils.cp("#{CordovaScreenshots::IONIC_ANDROID_CONFIG_PATH}/ScreengrabTest.java", test_path)
+        # TODO replace package_name in file before copying
+      end
+
+      def self.copy_android_build_extras_gradle
+        android_resources_path = File.expand_path("#{HELPER_PATH}/../resources/android")
+        FileUtils.cp("#{android_resources_path}/build-extras.gradle", "platforms/android/app")
+      end
+
+      def self.copy_android_manifest(package_name_path)
+        android_resources_path = File.expand_path("#{HELPER_PATH}/../resources/android")
+        dest_path = "platforms/android/app/src/debug"
+        Dir.exist?(dest_path) || FileUtils.mkdir_p(dest_path)
+        FileUtils.cp("#{android_resources_path}/AndroidManifest.xml", dest_path)
+        # TODO replace package_name in file before copying
+      end
     end
   end
 end
