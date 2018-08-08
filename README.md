@@ -20,6 +20,8 @@ Usually this is a challenge, as <!-- TODO both require --> it you to modify your
 
 By keeping your test files in your `fastlane` folder and offering a simple action to "patch" your native projects each time before running the screenshot creation process, this plugin offers a way around that.
 
+Why do these actions not just copy over a test template to the native project before each run of the screenshots actions? Because then the user couldn't use the Xcode and Android Studio built in test recorders or editors to improve the tests. The tests would be saved only in `platforms` and overwritten or thrown away with the next platform regeneration. By linking the tests files from the `fastlane` folder, this can not happen.
+
 ## Actions
 
 ### `ionic_ios_config_snapshot`
