@@ -165,6 +165,7 @@ module Fastlane
           UI.message "Adding UI Test Source '#{file}'"
           files << test_group.new_reference(File.absolute_path(file), '<absolute>')
         end
+        # TODO Manually add `fastlane/SnapshotHelper.swift` (or actual location)
         target.add_file_references(files)
 
         #
@@ -221,7 +222,7 @@ module Fastlane
       end
 
       def self.authors
-        ['Adrian Regan']
+        ['Adrian Regan', 'Jan Piotrowski']
       end
 
       def self.return_value
