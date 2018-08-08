@@ -30,17 +30,20 @@ module Fastlane
         Dir["#{CordovaScreenshots::IONIC_IOS_BUILD_PATH}/*.xcodeproj"].last || nil
       end
 
-      def self.copy_android_sample_test()
+      def self.copy_android_sample_test(package_name)
         android_resources_path = File.expand_path("#{HELPER_PATH}/../resources/android")
         Dir.exist?(CordovaScreenshots::IONIC_ANDROID_CONFIG_PATH) || FileUtils.mkdir_p(CordovaScreenshots::IONIC_ANDROID_CONFIG_PATH)
-        FileUtils.cp("#{android_resources_path}/ScreengrabTest.java", "#{CordovaScreenshots::IONIC_ANDROID_CONFIG_PATH}")
+        # TODO Don't overwrite existing files!
+        filename = "ScreengrabTest.java"
+        FileUtils.cp("#{android_resources_path}/#{filename}", "#{CordovaScreenshots::IONIC_ANDROID_CONFIG_PATH}")
+        replace_package_name("#{CordovaScreenshots::IONIC_ANDROID_CONFIG_PATH}/#{filename}", package_name)
       end
 
-      def self.copy_android_test_file(package_name_path, package_name)
+      def self.copy_android_test_file(package_name_path)
         test_path = "platforms/android/app/src/androidTest/java/#{package_name_path}"
         Dir.exist?(test_path) || FileUtils.mkdir_p(test_path)
+        # TODO Handle missing ScreengrabTest.java file and suggest using other action
         FileUtils.cp("#{CordovaScreenshots::IONIC_ANDROID_CONFIG_PATH}/ScreengrabTest.java", test_path)
-        # TODO replace package_name in file before copying
       end
 
       def self.copy_android_build_extras_gradle
@@ -48,12 +51,21 @@ module Fastlane
         FileUtils.cp("#{android_resources_path}/build-extras.gradle", "platforms/android/app")
       end
 
-      def self.copy_android_manifest(package_name_path)
+      def self.copy_android_manifest(package_name)
         android_resources_path = File.expand_path("#{HELPER_PATH}/../resources/android")
         dest_path = "platforms/android/app/src/debug"
+        filename = "AndroidManifest.xml"
         Dir.exist?(dest_path) || FileUtils.mkdir_p(dest_path)
-        FileUtils.cp("#{android_resources_path}/AndroidManifest.xml", dest_path)
-        # TODO replace package_name in file before copying
+        FileUtils.cp("#{android_resources_path}/#{filename}", dest_path)
+        replace_package_name("#{dest_path}/#{filename}", package_name)
+      end
+
+      def self.replace_package_name(file, package_name)
+        data = File.read(file) 
+        filtered_data = data.gsub("tools.fastlane.plugin.cordova_screenshots", package_name) 
+        File.open(file, "w") do |f|
+          f.write(filtered_data)
+        end
       end
     end
   end

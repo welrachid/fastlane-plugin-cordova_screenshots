@@ -1,4 +1,4 @@
-package io.ionic.starter; // TODO replace by supplied param
+package tools.fastlane.plugin.cordova_screenshots;
 
 
 import android.support.test.espresso.ViewInteraction;

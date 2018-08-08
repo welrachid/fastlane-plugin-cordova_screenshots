@@ -9,7 +9,7 @@ module Fastlane
         package_name_path = package_name.gsub('.', '/')
 
         # copy over test file to `platforms\android\app\src\androidTest\java\...\ScreengrabTest.java` (... = io\ionic\starter)
-        Fastlane::Helper::CordovaScreenshotsHelper.copy_android_test_file(package_name_path, package_name)
+        Fastlane::Helper::CordovaScreenshotsHelper.copy_android_test_file(package_name_path)
 
         # copy over build-extras.gradle to `platforms\android\app`
         Fastlane::Helper::CordovaScreenshotsHelper.copy_android_build_extras_gradle
@@ -39,7 +39,7 @@ module Fastlane
       def self.available_options
         [
             FastlaneCore::ConfigItem.new(key: :package_name,
-                env_name: 'CORDOVA_SCREENSHOTS_APP_PACKAGE_NAME',
+                env_name: 'CORDOVA_SCREENSHOTS_PACKAGE_NAME',
                 description: "The package name of the app under test (e.g. com.yourcompany.yourapp)",
                 code_gen_sensitive: true,
                 default_value: CredentialsManager::AppfileConfig.try_fetch_value(:package_name),
