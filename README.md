@@ -1,6 +1,13 @@
 # cordova_screenshots plugin
 
-[![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-cordova_screenshots)
+[![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-cordova_screenshots) [![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/ionic-zone/fastlane-plugin-cordova_screenshots/blob/master/LICENSE)
+[![Gem](https://img.shields.io/gem/v/fastlane-plugin-cordova_screenshots.svg?style=flat)](http://rubygems.org/gems/fastlane-plugin-cordova_screenshots)
+
+This _fastlane_ plugin enables you to **create automated screenshots** of your **Cordova (or Ionic) project**, both for iOS and Android, with _fastlane_ using the normal [`capture_ios_screenshots`](https://docs.fastlane.tools/actions/capture_ios_screenshots/) and [`capture_android_screenshots`](https://docs.fastlane.tools/actions/capture_android_screenshots/) actions or [`fastlane snapshot`](https://docs.fastlane.tools/actions/snapshot/) (for iOS) or [`fastlane screengrab`](https://docs.fastlane.tools/actions/screengrab/) (for Android) commands.
+
+This usually is a challenge, as these require you to modify your native projects and add some files. Cordova projects are generated for you and not tracked by version control, so those changes (including the test files your wrote) would get lost frequently.
+
+By keeping your test files in your `fastlane` folder and offering an action to "retrofit" them to your native projects each time before running the screenshot creation actions, this plugin offers a way around that.
 
 ## Getting Started
 
@@ -9,14 +16,6 @@ This project is a [_fastlane_](https://github.com/fastlane/fastlane) plugin. To 
 ```bash
 fastlane add_plugin cordova_screenshots
 ```
-
-## About cordova_screenshots
-
-This plugin enables you to create automated screenshots of your Cordova (or Ionic) project, both for iOS or Android, with _fastlane_ using the normal [`capture_ios_screenshots`](https://docs.fastlane.tools/actions/capture_ios_screenshots/) and [`capture_android_screenshots`](https://docs.fastlane.tools/actions/capture_android_screenshots/) actions or [`fastlane snapshot`](https://docs.fastlane.tools/actions/snapshot/) (iOS) or [`fastlane screengrab`](https://docs.fastlane.tools/actions/screengrab/) (Android) commands.
-
-This usually is a challenge, as both require you to modify your native projects and add some files. As Cordova projects are generated for you and not tracked by version control, those changes (including the test files your wrote) would get lost frequently.
-
-By keeping your test files in your `fastlane` folder and offering an action to "retrofit" them to your native projects each time before running the screenshot creation actions, this plugin offers a way around that.
 
 ## Actions
 
