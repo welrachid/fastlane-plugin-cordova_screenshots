@@ -15,9 +15,7 @@ end
 
 platform :android do
   lane :screenshots do
-    retrofit_cordova_screenshots_android(
-      package_name: "[YOUR APP PACKAGE NAME]"
-    )
+    retrofit_cordova_screenshots_android()
     screengrab
   end
 end

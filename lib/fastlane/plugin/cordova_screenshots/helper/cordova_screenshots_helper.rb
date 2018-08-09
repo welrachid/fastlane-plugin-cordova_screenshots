@@ -40,6 +40,15 @@ module Fastlane
         replace_package_name("#{CordovaScreenshots::CORDOVA_SCREENSHOTS_ANDROID_CONFIG_PATH}/#{filename}", package_name)
       end
 
+      # Read package name from test file
+      def self.read_package_name_from_android_test()
+        text = File.read("#{CordovaScreenshots::CORDOVA_SCREENSHOTS_ANDROID_CONFIG_PATH}/ScreengrabTest.java")
+        # TODO: Error message if file is missing
+        match = text.match(/package (.*)?;/)
+        match[1]
+        # TODO: Error message if package name can not be read
+      end
+
       # copy over test file to `platforms\android\app\src\androidTest\java\...\ScreengrabTest.java` (... = io\ionic\starter)
       def self.copy_android_test(package_name_path)
         test_path = "platforms/android/app/src/androidTest/java/#{package_name_path}"
