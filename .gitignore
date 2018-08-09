@@ -1,4 +1,3 @@
-.tests/
 *.gem
 Gemfile.lock
 
@@ -9,3 +8,5 @@ Gemfile.lock
 /rdoc/
 fastlane/README.md
 fastlane/report.xml
+coverage
+test-results
