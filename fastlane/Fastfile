@@ -1,23 +1,25 @@
 platform :ios do
-
-  before_all do
-    #
+  lane :screenshots do
     # This will retrofit any existing schemes in fastlane/cordova_screenshots/ios/
-    #
-    ionic_ios_snapshot(
-    	team_id: "[YOUR TEAM ID]",
-    	bundle_id: "[YOUR APP BUNDLE ID]"
+    retrofit_cordova_screenshots_ios(
+      team_id: "[YOUR TEAM ID]",
+      bundle_id: "[YOUR APP BUNDLE ID]"
     )
-  end
-
-  lane :release do
-  	# This will run the retrofitted UI Tests for you and create snapshots... :-)
-  	snapshot(
+    # This will run the retrofitted UI Tests for you and create snapshots
+    snapshot(
       output_simulator_logs: true,
       reinstall_app: false,
       erase_simulator: true,
-      scheme: "ionic-screen-shots" # The name of a scheme to use, one that you generated with ionic_ios_config_snapshot
+      scheme: "ionic-screen-shots" # TODO
     )
   end
-  
+end
+
+platform :android do
+  lane :screenshots do
+    retrofit_cordova_screenshots_android(
+      package_name: "[YOUR APP PACKAGE NAME]"
+    )
+    screengrab
+  end
 end
