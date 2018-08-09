@@ -15,7 +15,17 @@ end
 
 platform :android do
   lane :screenshots do
-    retrofit_cordova_screenshots_android()
+    retrofit_cordova_screenshots_android
+    gradle(
+      task: 'assemble',
+      build_type: 'Debug',
+      project_dir: 'platforms/android'
+    )
+    gradle(
+      task: 'assemble',
+      build_type: 'AndroidTest',
+      project_dir: 'platforms/android'
+    )
     screengrab
   end
 end

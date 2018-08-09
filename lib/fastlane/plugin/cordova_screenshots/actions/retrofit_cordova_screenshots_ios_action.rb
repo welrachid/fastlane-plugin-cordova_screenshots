@@ -26,6 +26,8 @@ module Fastlane
         end
         UI.message("Found schemes: #{schemes}")
 
+        # TODO: Error message if no schemes were found, refer to `init_cordova_screenshots_ios`
+
         #
         # Process each scheme
         #
