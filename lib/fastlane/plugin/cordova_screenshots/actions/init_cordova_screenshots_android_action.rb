@@ -44,7 +44,7 @@ module Fastlane
         # See: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Platforms.md
         #
         # [:ios, :mac, :android].include?(platform)
-        [:ios].include?(platform)
+        [:android].include?(platform)
       end
     end
   end
