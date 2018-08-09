@@ -4,7 +4,7 @@ module Fastlane
   module Actions
     class RetrofitCordovaScreenshotsIosAction < Action
       def self.run(params)
-        UI.message "Retrofitting iOS UI test from '#{CordovaScreenshots::CORDOVA_SCREENSHOTS_IOS_CONFIG_PATH}' into Cordova iOS Xcode project."
+        UI.message("Retrofitting iOS UI test from '#{CordovaScreenshots::CORDOVA_SCREENSHOTS_IOS_CONFIG_PATH}' into Cordova iOS Xcode project.")
 
         (!params.nil? && !params[:ios_xcode_path].nil?) || UI.user_error!("Mandatory parameter :ios_xcode_path not specified")
 
@@ -24,18 +24,17 @@ module Fastlane
         schemes = Dir.glob("#{CordovaScreenshots::CORDOVA_SCREENSHOTS_IOS_CONFIG_PATH}/*/").reject do |d|
           d =~ /^\.{1,2}$/ # excludes . and ..
         end
-        UI.message "Found schemes: #{schemes}"
+        UI.message("Found schemes: #{schemes}")
 
         #
         # Process each scheme
         #
         schemes.each do |scheme_path|
-          UI.message "Processing scheme: #{scheme_path}..."
+          UI.message("Processing scheme: #{scheme_path}...")
           generate_xcode_unit_test(scheme_path, xcode_project_path, team_id, bundle_id, target_os)
         end
 
         UI.success("Done. You can now run `fastlane snapshot` to take screenshots.")
-
       end
 
       def self.generate_xcode_unit_test(config_folder, xcode_project_path, team_id, bundle_id, target_os)
@@ -68,8 +67,7 @@ module Fastlane
         #
         # Success
         #
-        UI.success "Completed retrofit of '#{scheme_name}' into generated Xcode Project '#{project_name}'."
-
+        UI.success("Completed retrofit of '#{scheme_name}' into generated Xcode Project '#{project_name}'.")
       end
 
       def self.clean_xcode_project(proj, scheme_name)
@@ -79,7 +77,7 @@ module Fastlane
         target = nil
         proj.targets.each do |t|
           next unless t.name == scheme_name
-          UI.important "Found existing Target '#{t.name}' and removed it."
+          UI.important("Found existing Target '#{t.name}' and removed it.")
           target = t
           break
         end
@@ -92,7 +90,7 @@ module Fastlane
           next unless g.name == scheme_name
           g.clear
           test_group = g
-          UI.important "Found existing Code Group '#{g.name}' and removed it."
+          UI.important("Found existing Code Group '#{g.name}' and removed it.")
           break
         end
 
@@ -108,7 +106,7 @@ module Fastlane
         product_ref_name = scheme_name + '.xctest'
         proj.products_group.files.each do |product_ref|
           if product_ref.path == product_ref_name
-            UI.important "Found existing Product Group '#{product_ref.path}' and removed it."
+            UI.important("Found existing Product Group '#{product_ref.path}' and removed it.")
             product_ref.remove_from_project
           end
         end
@@ -120,17 +118,17 @@ module Fastlane
         #
         # Create new test group
         #
-        UI.message "Creating UI Test Group '#{scheme_name}' for snapshots testing"
+        UI.message("Creating UI Test Group '#{scheme_name}' for snapshots testing")
         test_group = proj.new_group(scheme_name.to_s, File.absolute_path(config_folder), '<absolute>')
 
         #
         # Find main target
         #
-        UI.message "Finding Main Target (of the project)..."
+        UI.message("Finding Main Target (of the project)...")
         main_target = nil
         proj.root_object.targets.each do |t|
           if t.name == project_name
-            UI.message "Found main target as '#{t.name}'"
+            UI.message("Found main target as '#{t.name}'")
             main_target = t
           end
         end
@@ -142,7 +140,7 @@ module Fastlane
         #
         target = proj.new_target(:ui_test_bundle, scheme_name, :ios, target_os, proj.products_group, :swift)
 
-        # 
+        #
         # "Create" product and put into target
         #
         product_ref_name = scheme_name + '.xctest'
@@ -152,7 +150,7 @@ module Fastlane
         #
         # Add main_target as dependency of target
         #
-        UI.message "Adding Main Target Dependency to new Target: '#{main_target}'"
+        UI.message("Adding Main Target Dependency to new Target: '#{main_target}'")
         target.add_dependency(main_target)
 
         # We need to save here for some reason... xcodeproj!?
@@ -161,20 +159,20 @@ module Fastlane
         #
         # Add files (fastlane configured UI Unit Tests) into target (via test group)
         #
-        UI.message "Adding Pre-Configured UI Unit Tests (*.plist and *.swift) to Test Group '#{scheme_name}'..."
+        UI.message("Adding Pre-Configured UI Unit Tests (*.plist and *.swift) to Test Group '#{scheme_name}'...")
 
         files = []
         Dir["#{config_folder}*.plist", "#{config_folder}*.swift"].each do |file| # config_folder ends with / already
-          UI.message "Adding UI Test Source '#{file}'"
+          UI.message("Adding UI Test Source '#{file}'")
           files << test_group.new_reference(File.absolute_path(file), '<absolute>')
         end
-        # TODO Manually add `fastlane/SnapshotHelper.swift` (or actual location)
+        # TODO: Manually add `fastlane/SnapshotHelper.swift` (or actual location)
         target.add_file_references(files)
 
         #
         # Configure project and target metadata
-        #        
-        UI.message "Configuring Project Metadata"
+        #
+        UI.message("Configuring Project Metadata")
 
         target_config = {
           CreatedOnToolsVersion: "8.2",
@@ -200,7 +198,7 @@ module Fastlane
         #
         # Create a shared scheme for the UI tests
         #
-        UI.message "Generating Xcode Scheme '#{scheme_name}' to run UI Snapshot Tests"
+        UI.message("Generating Xcode Scheme '#{scheme_name}' to run UI Snapshot Tests")
         existing_scheme = Xcodeproj::XCScheme.shared_data_dir(xcode_project_path) + "/#{scheme_name}.xcscheme"
         scheme = File.exist?(existing_scheme) ? Xcodeproj::XCScheme.new(existing_scheme) : Xcodeproj::XCScheme.new
 

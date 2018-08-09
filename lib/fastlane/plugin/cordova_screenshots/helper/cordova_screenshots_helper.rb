@@ -8,11 +8,11 @@ module Fastlane
       def self.copy_all_files(src_folder, project_folder)
         if src_folder && Dir.exist?(src_folder)
           dest_folder = project_folder.to_s
-          UI.message "Copying all files from '#{src_folder}' to '#{dest_folder}'"
+          UI.message("Copying all files from '#{src_folder}' to '#{dest_folder}'")
           Dir.exist?(dest_folder) || FileUtils.mkdir_p(dest_folder)
           FileUtils.cp_r(src_folder + "/.", dest_folder)
         elsif
-          UI.user_error! "Copying files: '#{src_folder}' does not exist."
+          UI.user_error!("Copying files: '#{src_folder}' does not exist.")
         end
       end
 
@@ -20,7 +20,7 @@ module Fastlane
         ios_resources_path = File.expand_path("#{HELPER_PATH}/../resources/ios")
         source_folder = "#{ios_resources_path}/#{CordovaScreenshots::CORDOVA_SCREENSHOTS_DEFAULT_IOS_UNIT_TEST_NAME}"
         dest_folder = "#{CordovaScreenshots::CORDOVA_SCREENSHOTS_IOS_CONFIG_PATH}/#{scheme_name}"
-        # TODO Don't overwrite existing files
+        # TODO: Don't overwrite existing files
         copy_all_files(source_folder, dest_folder)
       end
 
@@ -34,9 +34,9 @@ module Fastlane
       def self.copy_android_sample_test(package_name)
         android_resources_path = File.expand_path("#{HELPER_PATH}/../resources/android")
         Dir.exist?(CordovaScreenshots::CORDOVA_SCREENSHOTS_ANDROID_CONFIG_PATH) || FileUtils.mkdir_p(CordovaScreenshots::CORDOVA_SCREENSHOTS_ANDROID_CONFIG_PATH)
-        # TODO Don't overwrite existing files!
+        # TODO: Don't overwrite existing files!
         filename = "ScreengrabTest.java"
-        FileUtils.cp("#{android_resources_path}/#{filename}", "#{CordovaScreenshots::CORDOVA_SCREENSHOTS_ANDROID_CONFIG_PATH}")
+        FileUtils.cp("#{android_resources_path}/#{filename}", CordovaScreenshots::CORDOVA_SCREENSHOTS_ANDROID_CONFIG_PATH.to_s)
         replace_package_name("#{CordovaScreenshots::CORDOVA_SCREENSHOTS_ANDROID_CONFIG_PATH}/#{filename}", package_name)
       end
 
@@ -44,7 +44,7 @@ module Fastlane
       def self.copy_android_test(package_name_path)
         test_path = "platforms/android/app/src/androidTest/java/#{package_name_path}"
         Dir.exist?(test_path) || FileUtils.mkdir_p(test_path)
-        # TODO Handle missing ScreengrabTest.java file and suggest using other action
+        # TODO: Handle missing ScreengrabTest.java file and suggest using other action
         FileUtils.cp("#{CordovaScreenshots::CORDOVA_SCREENSHOTS_ANDROID_CONFIG_PATH}/ScreengrabTest.java", test_path)
       end
 
@@ -65,8 +65,8 @@ module Fastlane
       end
 
       def self.replace_package_name(file, package_name)
-        data = File.read(file) 
-        filtered_data = data.gsub("tools.fastlane.plugin.cordova_screenshots", package_name) 
+        data = File.read(file)
+        filtered_data = data.gsub("tools.fastlane.plugin.cordova_screenshots", package_name)
         File.open(file, "w") do |f|
           f.write(filtered_data)
         end

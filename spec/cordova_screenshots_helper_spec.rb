@@ -4,7 +4,7 @@ require 'fakefs'
 require 'fastlane/plugin/cordova_screenshots/constants'
 
 describe Fastlane::Helper::CordovaScreenshotsHelper do
-  include FakeFS::SpecHelpers::All
+  include(FakeFS::SpecHelpers::All)
   describe '#copy_ios_ui_test_code' do
     it 'should copy over sample files' do
       FakeFS.with_fresh do

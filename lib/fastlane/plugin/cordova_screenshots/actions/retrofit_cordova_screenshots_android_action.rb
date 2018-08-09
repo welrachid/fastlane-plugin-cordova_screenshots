@@ -4,7 +4,7 @@ module Fastlane
   module Actions
     class RetrofitCordovaScreenshotsAndroidAction < Action
       def self.run(params)
-        UI.message "Retrofitting Android UI test from '#{CordovaScreenshots::CORDOVA_SCREENSHOTS_ANDROID_CONFIG_PATH}' into Cordova Android project."
+        UI.message("Retrofitting Android UI test from '#{CordovaScreenshots::CORDOVA_SCREENSHOTS_ANDROID_CONFIG_PATH}' into Cordova Android project.")
 
         package_name = params[:package_name]
         package_name_path = package_name.gsub('.', '/')
@@ -35,11 +35,11 @@ module Fastlane
 
       def self.available_options
         [
-            FastlaneCore::ConfigItem.new(key: :package_name,
-                env_name: 'CORDOVA_SCREENSHOTS_PACKAGE_NAME',
-                description: "The package name of the app under test (e.g. com.yourcompany.yourapp)",
-                default_value: CredentialsManager::AppfileConfig.try_fetch_value(:package_name),
-                optional: false)
+          FastlaneCore::ConfigItem.new(key: :package_name,
+              env_name: 'CORDOVA_SCREENSHOTS_PACKAGE_NAME',
+              description: "The package name of the app under test (e.g. com.yourcompany.yourapp)",
+              default_value: CredentialsManager::AppfileConfig.try_fetch_value(:package_name),
+              optional: false)
         ]
       end
 

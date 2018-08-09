@@ -3,14 +3,13 @@ require 'fastlane/plugin/cordova_screenshots/constants'
 
 module Fastlane
   module Actions
-
     class InitCordovaScreenshotsIosAction < Action
       def self.run(params)
         scheme_name = params[:scheme_name]
-        
+
         UI.message("Creating new iOS UI Unit Test (with scheme '#{scheme_name}') in '#{CordovaScreenshots::CORDOVA_SCREENSHOTS_IOS_CONFIG_PATH}'")
         Fastlane::Helper::CordovaScreenshotsHelper.copy_ios_sample_tests(scheme_name)
-        
+
         UI.success("Done. Call the `retrofit_cordova_screenshots_ios` action to integrate it into your Cordova iOS Xcode project.")
       end
 
