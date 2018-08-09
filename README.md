@@ -12,38 +12,43 @@ fastlane add_plugin cordova_screenshots
 
 ## About cordova_screenshots
 
-This plugin enables you do create automated screenshots of your Cordova (or Ionic) project, both for iOS or Android, with _fastlane_ using the normal `capture_ios_screenshots` (`snapshot`) or `capture_android_screenshots` (`screengrab`) actions.
+This plugin enables you to create automated screenshots of your Cordova (or Ionic) project, both for iOS or Android, with _fastlane_ using the normal [`capture_ios_screenshots`](https://docs.fastlane.tools/actions/capture_ios_screenshots/) and [`capture_android_screenshots`](https://docs.fastlane.tools/actions/capture_android_screenshots/) actions or [`fastlane snapshot`](https://docs.fastlane.tools/actions/snapshot/) (iOS) or [`fastlane screengrab`](https://docs.fastlane.tools/actions/screengrab/) (Android) commands.
 
 This usually is a challenge, as both require you to modify your native projects and add some files. As Cordova projects are generated for you and not tracked by version control, those changes (including the test files your wrote) would get lost frequently.
 
-By keeping your test files in your `fastlane` folder and offering a simple action to "retrofit" your native projects each time before running the screenshot creation actions, this plugin offers a way around that.
+By keeping your test files in your `fastlane` folder and offering an action to "retrofit" them to your native projects each time before running the screenshot creation actions, this plugin offers a way around that.
 
 ## Actions
+
+- [`init_cordova_screenshots_ios`](#init_cordova_screenshots_ios)
+- [`retrofit_cordova_screenshots_ios`](#retrofit_cordova_screenshots_ios)
+- [`init_cordova_screenshots_android`](#init_cordova_screenshots_android)
+- [`retrofit_cordova_screenshots_android`](#retrofit_cordova_screenshots_android)
 
 ### iOS
 
 #### `init_cordova_screenshots_ios`
 
-This action creates a sample iOS UI Test file (and saves it to `fastlane/cordova_screenshots/ios`). It takes an optional `scheme_name` parameter, that defines the scheme name that will be used when retrofitting the test file into your Xcode project later.
+This action creates a sample iOS UI Test file in `fastlane/cordova_screenshots/ios`. It takes an optional `scheme_name` parameter, that defines the scheme name that will be used when retrofitting the test file into your Xcode project later.
 
-You can run it either via your `Fastfile` or manually: `fastlane run init_cordova_screenshots_ios scheme_name:"another_scheme_name"` (which will create the folder `fastlane/cordova_screenshots/ios/another_scheme_name`).
+You can run it either manually with `fastlane run init_cordova_screenshots_ios scheme_name:"another_scheme_name"` (which will create the folder `fastlane/cordova_screenshots/ios/another_scheme_name`) or a lane in your `Fastfile`.
 
 #### `retrofit_cordova_screenshots_ios`
 
 After iOS the test files are created, you can [edit them and write some tests to take screenshots](WRITING_TESTS.md).
 
-After that, you retrofit the tests into your Xcode project using this action. It scans the `fastlane/cordova_screenshots/ios` folder for sub folders and retrofits each into the Cordova iOS Xcode project by linking them absolutely. (It then creates a UI Test Target and Scheme based on the name of the subfolder. The files are not copied over to the project, so the Xcode project refers to the files in your `fastlane` folder.)
+Then you retrofit the tests into your Xcode project using this action: It scans the `fastlane/cordova_screenshots/ios` folder for sub folders and retrofits each into the Cordova iOS Xcode project by linking them absolutely. (It then creates a UI Test Target and Scheme based on the name of the subfolder. The files are not copied over to the project, so the Xcode project refers to the files in your `fastlane` folder.)
 
 The action has multiple options:
 
-* `team_id` is automatically set if it is specified in your fastlane `Appfile`.
-* `bundle_id` is set automatically if the `package_name` parameter is set in your fastlane `Appfile`.
-* `ios_xcode_path` specifies which Xcode project to use. By default it attempts to pick the Xcode project from the `platforms/ios` folder.
-* `min_target_ios` defines the minimum iOS version
+- `team_id` is automatically set if it is specified in your fastlane `Appfile`.
+- `bundle_id` is set automatically if the `package_name` parameter is set in your fastlane `Appfile`.
+- `ios_xcode_path` specifies which Xcode project to use. By default it attempts to pick the Xcode project from the `platforms/ios` folder.
+- `min_target_ios` defines the minimum iOS version
 
 All these parameters can be overridden by specifying them in the call to the action.
 
-This action should be executed each time before you use [`capture_ios_screenshots` action]((https://docs.fastlane.tools/actions/capture_ios_screenshots/)) (or command [`fastlane snapshot`](https://docs.fastlane.tools/actions/snapshot/) on the command line) to create screenshots as it makes sure the test files are linked into the current project.
+This action should be executed each time before you use [`capture_ios_screenshots` action](https://docs.fastlane.tools/actions/capture_ios_screenshots/) (or command [`fastlane snapshot`](https://docs.fastlane.tools/actions/snapshot/) on the command line) to create screenshots as it makes sure the test files are linked into the current project.
 
 ### Android
 
@@ -51,19 +56,19 @@ This action should be executed each time before you use [`capture_ios_screenshot
 
 Copy over test file to `fastlane/cordova_screenshots/android` to be edited by the user.
 
-This action creates a sample Android Test file (and saves it to `fastlane/cordova_screenshots/android`). It needs a `package_name` parameter (for use in the created test file), that is read from your `Appfile` if set.
+This action creates a sample Android Test file and saves it to `fastlane/cordova_screenshots/android`. It needs a `package_name` parameter (for use in the created test file), that is read from your `Appfile` if set.
 
-You can run it either via your `Fastfile` or manually: `fastlane run init_cordova_screenshots_android` (which will create the folder `fastlane/cordova_screenshots/android`).
+You can run it either manually with `fastlane run init_cordova_screenshots_android` or a lane in your `Fastfile`.
 
 #### `retrofit_cordova_screenshots_android`
 
 After the Android test files are created, you can [edit them and write some tests to take screenshots](WRITING_TESTS.md).
 
-After that, you retrofit the tests into your Android Studio project using this action. 
+Then you retrofit the tests into your Android Studio project using this action.
 
 **Note:** Right now, this action actually copies (!) the test file from its location into your Android project. A later version of this plugin will also link the Android test files into the project as it does for the iOS tests.
 
-This action should be executed each time before you use [`capture_android_screenshots` action]((https://docs.fastlane.tools/actions/capture_android_screenshots/)) (or command [`fastlane screengrab`](https://docs.fastlane.tools/actions/screengrab/) on the command line) to create screenshots as it makes sure the test files are <!-- linked into --> present in the current project.
+This action should be executed each time before you use [`capture_android_screenshots` action](https://docs.fastlane.tools/actions/capture_android_screenshots/) (or command [`fastlane screengrab`](https://docs.fastlane.tools/actions/screengrab/) on the command line) to create screenshots as it makes sure the test files are <!-- linked into --> present in the current project.
 
 Note that you also have to build the test and debug APK manually before taking screenshots:
 
