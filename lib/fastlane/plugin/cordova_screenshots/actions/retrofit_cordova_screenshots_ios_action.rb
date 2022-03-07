@@ -165,7 +165,7 @@ module Fastlane
         UI.message("Adding Pre-Configured UI Unit Tests (*.plist and *.swift) to Test Group '#{scheme_name}'...")
 
         files = []
-        Dir["#{config_folder}*.plist", "#{config_folder}*.swift"].each do |file| # config_folder ends with / already
+        Dir["#{config_folder}*.swift"].each do |file| # config_folder ends with / already
           UI.message("Adding UI Test Source '#{file}'")
           files << test_group.new_reference(File.absolute_path(file), '<absolute>')
         end
@@ -189,7 +189,8 @@ module Fastlane
           proj.root_object.attributes.store('TargetAttributes', { target.uuid => target_config })
         end
 
-        target.build_configuration_list.set_setting('INFOPLIST_FILE', File.absolute_path("#{config_folder}/Info.plist"))
+        #use projects own info.plist to make sure xcodebuild doesnt complain about multiple Info.plist in the project
+        target.build_configuration_list.set_setting('INFOPLIST_FILE', File.absolute_path("#{xcode_project_path}/../#{project_name}/#{project_name}-Info.plist"))
         target.build_configuration_list.set_setting('SWIFT_VERSION', swift_version)
         target.build_configuration_list.set_setting('PRODUCT_NAME', "$(TARGET_NAME)")
         target.build_configuration_list.set_setting('TEST_TARGET_NAME', project_name)
